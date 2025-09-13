@@ -1,0 +1,19 @@
+# Node.js dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Environment variable files
+.env
+.env.local
+
+# Logs
+*.log
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Others depending on your stack
