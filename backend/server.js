@@ -14,9 +14,16 @@ if (!fs.existsSync(path.join(DATA_DIR, 'products.json'))) fs.writeFileSync(path.
 if (!fs.existsSync(path.join(DATA_DIR, 'transactions.json'))) fs.writeFileSync(path.join(DATA_DIR, 'transactions.json'), '[]', 'utf8');
 
 // ✅ Middleware
-app.use(cors()); // Allow all origins
+app.use(cors({
+  origin: ['https://your-vercel-frontend.vercel.app', 'http://localhost:3000'], // frontend URLs
+}));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../frontend/build'))); // Serve React build
+
+// Serve React frontend in production
+const frontendBuildPath = path.join(__dirname, '../frontend/build');
+if (fs.existsSync(frontendBuildPath)) {
+  app.use(express.static(frontendBuildPath));
+}
 
 // Helper functions
 const readJson = (file) => JSON.parse(fs.readFileSync(path.join(DATA_DIR, file), 'utf8'));
@@ -25,8 +32,7 @@ const writeJson = (file, data) => fs.writeFileSync(path.join(DATA_DIR, file), JS
 // ---------------- Products API ----------------
 app.get('/api/products', (req, res) => {
   try {
-    const products = readJson('products.json');
-    res.json(products);
+    res.json(readJson('products.json'));
   } catch (err) {
     res.status(500).json({ error: 'Failed to read products' });
   }
@@ -74,8 +80,7 @@ app.delete('/api/products/:id', (req, res) => {
 // ---------------- Transactions API ----------------
 app.get('/api/transactions', (req, res) => {
   try {
-    const transactions = readJson('transactions.json');
-    res.json(transactions);
+    res.json(readJson('transactions.json'));
   } catch (err) {
     res.status(500).json({ error: 'Failed to read transactions' });
   }
@@ -88,6 +93,10 @@ app.post('/api/transactions', (req, res) => {
     const productIndex = products.findIndex(p => p.id === parseInt(productId));
 
     if (productIndex === -1) return res.status(404).json({ error: 'Product not found' });
+
+    if (type === 'sell' && products[productIndex].quantity < quantity) {
+      return res.status(400).json({ error: 'Insufficient stock' });
+    }
 
     const newTransaction = {
       id: Date.now(),
@@ -102,11 +111,9 @@ app.post('/api/transactions', (req, res) => {
     transactions.push(newTransaction);
     writeJson('transactions.json', transactions);
 
+    // Update stock
     if (type === 'add') products[productIndex].quantity += parseInt(quantity);
-    if (type === 'sell') {
-      if (products[productIndex].quantity < quantity) return res.status(400).json({ error: 'Insufficient stock' });
-      products[productIndex].quantity -= parseInt(quantity);
-    }
+    if (type === 'sell') products[productIndex].quantity -= parseInt(quantity);
 
     writeJson('products.json', products);
     res.json(newTransaction);
@@ -116,10 +123,15 @@ app.post('/api/transactions', (req, res) => {
 });
 
 // ---------------- React catch-all ----------------
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+app.get('*', (req, res) => {
+  if (fs.existsSync(frontendBuildPath)) {
+    res.sendFile(path.join(frontendBuildPath, 'index.html'));
+  } else {
+    res.status(404).send('Frontend not found');
+  }
 });
 
+// Start server
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
 });
