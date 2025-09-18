@@ -4,6 +4,7 @@ import Dashboard from './components/Dashboard';
 import Inventory from './components/Inventory';
 import Sales from './components/Sales';
 import Reporting from './components/Reporting';
+import Navbar from './components/Navbar';
 import "./App.css";
 
 function App() {
