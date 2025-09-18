@@ -1,4 +1,4 @@
-// frontend/src/Inventory.js
+/
 import React, { useEffect, useState } from 'react';
 import api from '../api';
 
@@ -73,24 +73,7 @@ const Inventory = () => {
 
   return (
     <div style={{ padding: '1rem' }}>
-      <h2>Product Management</h2>
-      {error && <div style={{ background: '#ff6b6b', color: 'white', padding: '1rem', margin: '1rem 0', borderRadius: '5px' }}>{error}</div>}
-
-      <form onSubmit={handleSubmit} style={{ marginBottom: '2rem' }}>
-        <input placeholder="Name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
-        <input placeholder="Description" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} required />
-        <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} required>
-          <option value="">Category</option>
-          <option value="Appetizer">Appetizer</option>
-          <option value="Main">Main</option>
-          <option value="Dessert">Dessert</option>
-        </select>
-        <input type="number" step="0.01" placeholder="Price (M)" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} required />
-        <input type="number" placeholder="Initial Quantity" value={formData.quantity} onChange={e => setFormData({ ...formData, quantity: e.target.value })} required />
-        <input placeholder="Image URL" value={formData.imageUrl} onChange={e => setFormData({ ...formData, imageUrl: e.target.value })} />
-        <button type="submit">{editId ? 'Update' : 'Add'} Product</button>
-      </form>
-
+    
       <h3>Current Products</h3>
       <table border="1" cellPadding="5" style={{ borderCollapse: 'collapse', width: '100%', marginBottom: '2rem' }}>
         <thead><tr><th>Name</th><th>Price (M)</th><th>Quantity</th><th>Actions</th><th>Alert</th></tr></thead>
@@ -125,6 +108,24 @@ const Inventory = () => {
           <option value="sell">Remove Stock (Sell)</option>
         </select>
         <button type="submit">Update Stock</button>
+      </form>
+              <h2>Product Management</h2>
+      {error && <div style={{ background: '#ff6b6b', color: 'white', padding: '1rem', margin: '1rem 0', borderRadius: '5px' }}>{error}</div>}
+
+      <form onSubmit={handleSubmit} style={{ marginBottom: '2rem' }}>
+        <input placeholder="Name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
+        <input placeholder="Description" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} required />
+        <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} required>
+          <option value="">Category</option>
+          <option value="Appetizer">Appetizer</option>
+          <option value="Main">Main</option>
+          <option value="Dessert">Dessert</option>
+        <option value="Snack">Snack</option>
+        </select>
+        <input type="number" step="0.01" placeholder="Price (M)" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} required />
+        <input type="number" placeholder="Initial Quantity" value={formData.quantity} onChange={e => setFormData({ ...formData, quantity: e.target.value })} required />
+        <input placeholder="Image URL" value={formData.imageUrl} onChange={e => setFormData({ ...formData, imageUrl: e.target.value })} />
+        <button type="submit">{editId ? 'Update' : 'Add'} Product</button>
       </form>
     </div>
   );
