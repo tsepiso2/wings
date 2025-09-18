@@ -4,7 +4,7 @@ import Dashboard from './components/Dashboard';
 import Inventory from './components/Inventory';
 import Sales from './components/Sales';
 import Reporting from './components/Reporting';
-
+import "./App.css";
 
 function App() {
   return (
