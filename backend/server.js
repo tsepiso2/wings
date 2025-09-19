@@ -8,26 +8,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const DATA_DIR = path.join(__dirname, 'data');
 
-// ✅ Ensure data folder and JSON files exist
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
-if (!fs.existsSync(path.join(DATA_DIR, 'products.json'))) fs.writeFileSync(path.join(DATA_DIR, 'products.json'), '[]', 'utf8');
-if (!fs.existsSync(path.join(DATA_DIR, 'transactions.json'))) fs.writeFileSync(path.join(DATA_DIR, 'transactions.json'), '[]', 'utf8');
 
-// ✅ Middleware
-app.use(cors({
-  origin: ['https://wings-main.onrender.com', 'http://localhost:3000'], // frontend URLs
-}));
-app.use(express.json());
 
-// Serve React frontend in production
-const frontendBuildPath = path.join(__dirname, '../frontend/build');
-if (fs.existsSync(frontendBuildPath)) {
-  app.use(express.static(frontendBuildPath));
-}
-
-// Helper functions
-const readJson = (file) => JSON.parse(fs.readFileSync(path.join(DATA_DIR, file), 'utf8'));
-const writeJson = (file, data) => fs.writeFileSync(path.join(DATA_DIR, file), JSON.stringify(data, null, 2), 'utf8');
 
 // ---------------- Products API ----------------
 app.get('/api/products', (req, res) => {
