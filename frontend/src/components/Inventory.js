@@ -15,10 +15,7 @@ const Inventory = () => {
     try {
       const res = await api.get('/products');
       setProducts(res.data);
-    } catch (err) {
-      console.error(err);
-      setError('Failed to load products. Ensure server is running.');
-    }
+    } 
   };
 
   const handleSubmit = async (e) => {
@@ -96,7 +93,7 @@ const Inventory = () => {
         </tbody>
       </table>
 
-      <h3>Stock Management</h3>
+      <h2>Stock Management</h2>
       <form onSubmit={handleStockChange}>
         <select value={stockForm.productId} onChange={e => setStockForm({ ...stockForm, productId: e.target.value })} required>
           <option value="">Select Product</option>
