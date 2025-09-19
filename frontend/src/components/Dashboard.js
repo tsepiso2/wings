@@ -5,7 +5,7 @@ const Dashboard = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get("https://wings-backend.onrender.com/api/products")
+    axios.get("https://render.com/docs/web-services#port-binding")
       .then(res => setProducts(res.data))
       .catch(err => console.error(err));
   }, []);
