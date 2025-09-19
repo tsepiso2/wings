@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "name": "Water",
+    "price": 8.00,
+    "description": "Refreshing bottled mineral water, 500ml.",
+    "category": "Beverages",
+    "quantity": 50,
+    "imageUrl": "https://images.unsplash.com/photo-1588159343745-4454b8b2a7b3"
+  },
+  {
+    "id": 2,
+    "name": "Rice",
+    "price": 120.00,
+    "description": "5kg bag of long-grain white rice, perfect for daily meals.",
+    "category": "Grains",
+    "quantity": 30,
+    "imageUrl": "https://images.unsplash.com/photo-1606788075761-621eb2c3c3c8"
+  },
+  {
+    "id": 3,
+    "name": "Fruits",
+    "price": 60.00,
+    "description": "Assorted fresh seasonal fruits including apples, bananas, and oranges.",
+    "category": "Fresh Produce",
+    "quantity": 25,
+    "imageUrl": "https://images.unsplash.com/photo-1574226516831-e1dff420e43e"
+  },
+  {
+    "id": 4,
+    "name": "Snacks",
+    "price": 35.00,
+    "description": "Variety pack of chips and crunchy treats.",
+    "category": "Snacks",
+    "quantity": 40,
+    "imageUrl": "https://images.unsplash.com/photo-1604908177639-31b4b7e5bfc0"
+  },
+  {
+    "id": 5,
+    "name": "Cookies",
+    "price": 25.00,
+    "description": "Delicious chocolate chip cookies, pack of 6.",
+    "category": "Bakery",
+    "quantity": 20,
+    "imageUrl": "https://images.unsplash.com/photo-1600891964599-f61ba0e24092"
+  },
+  {
+    "id": 6,
+    "name": "Tea",
+    "price": 55.00,
+    "description": "Box of 100 classic black tea bags for a refreshing brew.",
+    "category": "Beverages",
+    "quantity": 15,
+    "imageUrl": "https://images.unsplash.com/photo-1518976024611-4887d9732f56"
+  },
+  {
+    "id": 7,
+    "name": "Juice",
+    "price": 30.00,
+    "description": "1L bottle of natural orange juice with no added sugar.",
+    "category": "Beverages",
+    "quantity": 35,
+    "imageUrl": "https://images.unsplash.com/photo-1617196038534-bf0b77c33d64"
+  }
+]
