@@ -1,4 +1,3 @@
-
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -10,38 +9,59 @@ body {
 /* Navbar */
 .navbar {
   background-color: #5c4033; /* dark coffee brown */
-  padding: 1rem;
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* subtle depth */
+  position: sticky; /* stays on top */
+  top: 0;
+  z-index: 1000;
 }
 
 .navbar h1 {
   color: #f5f2e7;
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  font-weight: bold;
 }
 
 .navbar ul {
   list-style: none;
   display: flex;
+  gap: 25px; /* cleaner spacing than margin-left */
   margin: 0;
   padding: 0;
-}
-
-.navbar ul li {
-  margin-left: 20px;
 }
 
 .navbar ul li a {
   text-decoration: none;
   color: #f5f2e7;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 1rem;
+  position: relative;
   transition: color 0.3s ease;
 }
 
+/* Underline hover effect */
+.navbar ul li a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  left: 0;
+  bottom: -4px;
+  background-color: #d4a373; /* warm brown highlight */
+  transition: width 0.3s ease;
+}
+
 .navbar ul li a:hover {
-  color: #d4a373; /* warm brown highlight */
+  color: #d4a373;
+}
+
+.navbar ul li a:hover::after {
+  width: 100%;
 }
 
 /* Section titles */
