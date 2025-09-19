@@ -15,7 +15,7 @@ if (!fs.existsSync(path.join(DATA_DIR, 'transactions.json'))) fs.writeFileSync(p
 
 // ✅ Middleware
 app.use(cors({
-  origin: ['https://your-vercel-frontend.vercel.app', 'http://localhost:3000'], // frontend URLs
+  origin: ['https://wings-main.onrender.com', 'http://localhost:3000'], // frontend URLs
 }));
 app.use(express.json());
 
