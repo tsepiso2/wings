@@ -3,7 +3,7 @@ import api from '../api';
 
 const Inventory = () => {
   const [products, setProducts] = useState([]);
-  const [formData, setFormData] = useState({ name: '', description: '', category: '', price: '', quantity: '', imageUrl: '' });
+  const [formData, setFormData] = useState({ name: '', description: '', category: '', price: '', quantity: '', imageFile: null });
   const [editId, setEditId] = useState(null);
   const [stockForm, setStockForm] = useState({ productId: '', quantity: '', type: 'add' });
   const [error, setError] = useState('');
@@ -15,7 +15,6 @@ const Inventory = () => {
   const fetchProducts = async () => {
     try {
       const res = await api.get('/products');
-      // Make sure the backend returns an array
       if (Array.isArray(res.data)) {
         setProducts(res.data);
       } else {
@@ -34,19 +33,37 @@ const Inventory = () => {
       setError('Please fill all required fields.');
       return;
     }
-    const submitData = { ...formData, price: parseFloat(formData.price), quantity: parseInt(formData.quantity) };
-    if (isNaN(submitData.price) || isNaN(submitData.quantity)) {
+
+    const price = parseFloat(formData.price);
+    const quantity = parseInt(formData.quantity);
+    if (isNaN(price) || isNaN(quantity)) {
       setError('Price must be a number, Quantity must be an integer.');
       return;
     }
+
     try {
+      const data = new FormData();
+      data.append('name', formData.name);
+      data.append('description', formData.description);
+      data.append('category', formData.category);
+      data.append('price', price);
+      data.append('quantity', quantity);
+      if (formData.imageFile) {
+        data.append('image', formData.imageFile);
+      }
+
       if (editId) {
-        await api.put(`/products/${editId}`, submitData);
+        await api.put(`/products/${editId}`, data, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         setEditId(null);
       } else {
-        await api.post('/products', submitData);
+        await api.post('/products', data, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
       }
-      setFormData({ name: '', description: '', category: '', price: '', quantity: '', imageUrl: '' });
+
+      setFormData({ name: '', description: '', category: '', price: '', quantity: '', imageFile: null });
       setError('');
       fetchProducts();
     } catch (err) {
@@ -61,9 +78,9 @@ const Inventory = () => {
       category: product.category,
       price: product.price.toString(),
       quantity: product.quantity.toString(),
-      imageUrl: product.imageUrl || ''
+      imageFile: null // file will be uploaded again if user wants
     });
-    setEditId(product.id || product._id); // support _id if backend uses MongoDB
+    setEditId(product.id || product._id);
     setError('');
   };
 
@@ -127,6 +144,7 @@ const Inventory = () => {
               <th>Name</th>
               <th>Price (M)</th>
               <th>Quantity</th>
+              <th>Image</th>
               <th>Actions</th>
               <th>Alert</th>
             </tr>
@@ -140,6 +158,9 @@ const Inventory = () => {
                   <td>{p.price}</td>
                   <td>{p.quantity}</td>
                   <td>
+                    {p.imageUrl ? <img src={p.imageUrl} alt={p.name} style={{ width: '50px', height: '50px', objectFit: 'cover' }} /> : 'No Image'}
+                  </td>
+                  <td>
                     <button onClick={() => handleEdit(p)} style={{ marginRight: '0.5rem' }}>Edit</button>
                     <button onClick={() => handleDelete(p.id || p._id)}>Delete</button>
                   </td>
@@ -150,6 +171,25 @@ const Inventory = () => {
           </tbody>
         </table>
       )}
+
+      <h2>Product Management</h2>
+      {error && <div style={{ background: '#ff6b6b', color: 'white', padding: '1rem', margin: '1rem 0', borderRadius: '5px' }}>{error}</div>}
+
+      <form onSubmit={handleSubmit} style={{ marginBottom: '2rem' }}>
+        <input placeholder="Name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
+        <input placeholder="Description" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} required />
+        <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} required>
+          <option value="">Category</option>
+          <option value="Appetizer">Appetizer</option>
+          <option value="Main">Main</option>
+          <option value="Dessert">Dessert</option>
+          <option value="Snack">Snack</option>
+        </select>
+        <input type="number" step="0.01" placeholder="Price (M)" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} required />
+        <input type="number" placeholder="Initial Quantity" value={formData.quantity} onChange={e => setFormData({ ...formData, quantity: e.target.value })} required />
+        <input type="file" accept="image/*" onChange={e => setFormData({ ...formData, imageFile: e.target.files[0] })} />
+        <button type="submit">{editId ? 'Update' : 'Add'} Product</button>
+      </form>
 
       <h2>Stock Management</h2>
       <form onSubmit={handleStockChange}>
@@ -168,27 +208,9 @@ const Inventory = () => {
         </select>
         <button type="submit">Update Stock</button>
       </form>
-
-      <h2>Product Management</h2>
-      {error && <div style={{ background: '#ff6b6b', color: 'white', padding: '1rem', margin: '1rem 0', borderRadius: '5px' }}>{error}</div>}
-
-      <form onSubmit={handleSubmit} style={{ marginBottom: '2rem' }}>
-        <input placeholder="Name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
-        <input placeholder="Description" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} required />
-        <select value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} required>
-          <option value="">Category</option>
-          <option value="Appetizer">Appetizer</option>
-          <option value="Main">Main</option>
-          <option value="Dessert">Dessert</option>
-          <option value="Snack">Snack</option>
-        </select>
-        <input type="number" step="0.01" placeholder="Price (M)" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} required />
-        <input type="number" placeholder="Initial Quantity" value={formData.quantity} onChange={e => setFormData({ ...formData, quantity: e.target.value })} required />
-        <input placeholder="Image URL" value={formData.imageUrl} onChange={e => setFormData({ ...formData, imageUrl: e.target.value })} />
-        <button type="submit">{editId ? 'Update' : 'Add'} Product</button>
-      </form>
     </div>
   );
 };
 
 export default Inventory;
+
