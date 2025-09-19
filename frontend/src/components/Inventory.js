@@ -5,7 +5,7 @@ const Inventory = () => {
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({ 
     name: '', 
-    description: '', 
+    description: '',
     category: '', 
     price: '', 
     quantity: '', 
