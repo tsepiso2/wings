@@ -34,6 +34,7 @@ app.get('/api/products', (req, res) => {
   try {
     res.json(readJson('products.json'));
   } catch (err) {
+    console.error('Error reading products:', err);
     res.status(500).json({ error: 'Failed to read products' });
   }
 });
@@ -46,6 +47,7 @@ app.post('/api/products', (req, res) => {
     writeJson('products.json', products);
     res.json(newProduct);
   } catch (err) {
+    console.error('Error adding product:', err);
     res.status(500).json({ error: 'Failed to add product' });
   }
 });
@@ -62,6 +64,7 @@ app.put('/api/products/:id', (req, res) => {
       res.status(404).json({ error: 'Product not found' });
     }
   } catch (err) {
+    console.error('Error updating product:', err);
     res.status(500).json({ error: 'Failed to update product' });
   }
 });
@@ -73,6 +76,7 @@ app.delete('/api/products/:id', (req, res) => {
     writeJson('products.json', products);
     res.json({ message: 'Product deleted' });
   } catch (err) {
+    console.error('Error deleting product:', err);
     res.status(500).json({ error: 'Failed to delete product' });
   }
 });
@@ -82,6 +86,7 @@ app.get('/api/transactions', (req, res) => {
   try {
     res.json(readJson('transactions.json'));
   } catch (err) {
+    console.error('Error reading transactions:', err);
     res.status(500).json({ error: 'Failed to read transactions' });
   }
 });
@@ -118,6 +123,7 @@ app.post('/api/transactions', (req, res) => {
     writeJson('products.json', products);
     res.json(newTransaction);
   } catch (err) {
+    console.error('Error recording transaction:', err);
     res.status(500).json({ error: 'Failed to record transaction' });
   }
 });
@@ -133,5 +139,5 @@ app.get('*', (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT`);
+  console.log(`✅ Server running on http://localhost:${PORT}`);
 });
